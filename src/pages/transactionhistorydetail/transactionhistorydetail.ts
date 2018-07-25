@@ -11,13 +11,14 @@ export class TransactionHistoryDetailPage {
   public transactionNumber;
   public amount = 80;
   public account_transfer_from = "House Savings";
-  public recipient_name = "John Doe";
-  public recipient_address = "#13 Warrens Great House";
+  public recipient_name:String;
 
   public refernce_id;
   public transaction_date;
   public transaction_status;
   public transaction_amount;
+  public recipient_address;
+  public recipient_city;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     // come back to this this.transactionNumber = navParams.get('item');
@@ -25,8 +26,11 @@ export class TransactionHistoryDetailPage {
     this.transaction_date = navParams.get('date');
     this.transaction_status = navParams.get('status');
     this.transaction_amount = navParams.get('amount');
-
+    this.recipient_address = navParams.get('recipient_address');
+    this.recipient_city = navParams.get('recipient_city');
 
   }
 
+
+  
 }

@@ -51,7 +51,7 @@ export class TransactionHistoryPage {
 
   ionViewDidLoad() {}
 
-  openTransaction(event, accountNumber, ref_id, date, status, amount) {
+  openTransaction(event, accountNumber, ref_id, date, status, amount, recipient_city) {
     
     // Open the Transaction Detail Page
     this.navCtrl.push(TransactionHistoryDetailPage, {
@@ -59,7 +59,8 @@ export class TransactionHistoryPage {
       ref_id:ref_id,
       date:date, 
       status:status,
-      amount:amount
+      amount:amount,
+      recipient_city:recipient_city
     });
     
   }

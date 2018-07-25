@@ -52,21 +52,21 @@
       </ion-row>
        
       <h1 class = "header_title"> Transaction Details <br/> for #{{refernce_id}} </h1>
-      <p class = "text-center"> {{ transaction_status }}</p>
+      <p class = "text-center"> {{ transaction_status }}!</p>
       Date here:  {{transaction_date}}
       <ion-card padding>
               
           <ion-item class = "form_wrap">
             <ion-row>
               <div class = "field_name labelTitle"> First Name </div><br/>
-              <p>James</p>
+              <p>{{recipient_name}} </p>
             </ion-row>
           </ion-item>
 
           <ion-item class = "form_wrap">
             <ion-row>
               <div class = "field_name labelTitle"> Last Name </div><br/>
-              <p> Bond</p>
+              <p>  {{recipient_name_last}}</p>
             </ion-row>
           </ion-item>
 
@@ -87,21 +87,21 @@
           <ion-item class = "form_wrap">
             <ion-row>
               <div class = "field_name labelTitle"> City </div><br/>
-              <p> Wichita Falls  </p>
+              <p>  {{recipient_city}}  </p>
             </ion-row>
           </ion-item>
 
           <ion-item class = "form_wrap">
             <ion-row>
               <div class = "field_name labelTitle"> Postal Code </div><br/>
-              <p> 76308 </p>
+              <p> {{recipient_postal_code}} </p>
             </ion-row>
           </ion-item>
 
           <ion-item class = "form_wrap">
             <ion-row>
               <div class = "field_name labelTitle"> Country </div><br/>
-              <p> Texas (TX) </p>
+              <p> {{recipient_country}}</p>
             </ion-row>
           </ion-item>
         
@@ -114,11 +114,11 @@
           <ion-row class = "container">
           
             <ion-col class = "col6">
-              <p class = "field_name"> Transfer Amount </p>
+              <p class = "field_name"> Amount Sent: </p>
             </ion-col>
             
             <ion-col class = "col6">
-              <p> $80.00 </p>
+              <p> ${{transaction_amount}} </p>
             </ion-col>
 
           </ion-row>
@@ -126,11 +126,11 @@
           <ion-row class = "container">
           
             <ion-col class = "col6">
-              <p class = "field_name"> Transfer Rate </p>
+              <p class = "field_name"> Principal Amount </p>
             </ion-col>
             
             <ion-col class = "col6">
-              <p> $10.00 </p>
+              <p> ${{principal_amt}} </p>
             </ion-col>
 
           </ion-row>
@@ -138,11 +138,11 @@
           <ion-row class = "container">
           
           <ion-col class = "col6">
-            <p class = "field_name"> Currency </p>
+            <p class = "field_name"> Country's Bank </p>
           </ion-col>
           
           <ion-col class = "col6">
-            <p> USD </p>
+            <p> {{bank_country}} </p>
           </ion-col>
 
         </ion-row>
@@ -151,11 +151,11 @@
           <ion-row class = "container">
           
             <ion-col class = "col6">
-              <p class = "field_name"> Total Amount </p>
+              <p class = "field_name"> Charged Amount </p>
             </ion-col>
             
             <ion-col class = "col6">
-              <p> $90.00 </p>
+              <p> ${{charged_amt}} </p>
             </ion-col>
 
           </ion-row>
