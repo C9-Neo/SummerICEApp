@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
-import { Printer, PrintOptions } from '@ionic-native/printer';
 import { AccountsPage } from '../accounts/accounts';
 import { TransactionHistoryDetailPage } from '../transactionhistorydetail/transactionhistorydetail';
 import { TransactionServices } from '../../services/transaction.services';
+import { InfoPage } from '../info/info';
 
 import { SenderInfoService } from '../../services/senderInfo';
 
@@ -34,6 +34,7 @@ export class ThankyouPage {
   public principal_amt_currency;
   public error_status;
   public transaction_status;
+  public accountID;
 
   public recipient_city;
   public recipient_country;
@@ -42,16 +43,48 @@ export class ThankyouPage {
   public bic;
   public ban;
   public iban;
+  public bank_country;
 
   public transaction_ref;
   public proposal_id;
+  public transaction_id;
+  public status;
+  public status_timestamp;
+  public accountslists = [];
 
-  constructor(public alert: AlertController, public loaderCtrl: LoadingController, public transactionServices: TransactionServices, public navCtrl: NavController, public navParams: NavParams, private senderService: SenderInfoService) {}
+  constructor(public alert: AlertController, public loaderCtrl: LoadingController, public transactionServices: TransactionServices, public navCtrl: NavController, public navParams: NavParams) {
+
+    
+  }
 
   ionViewDidLoad() {
 
-    //this.sender_name = this.senderService.fetchUserData(76876876);
+    this.transactionServices.get("user_accounts_lists")
+    .then(
+      res => { // Success
 
+        console.log(res);
+
+        let accountID = this.navParams.get('accountID');
+        this.transaction_amount = this.navParams.get('charged_amt');
+        let amount_total_cost = this.navParams.get('charged_amt');
+
+        console.log(accountID);
+        console.log(this.transaction_amount);
+        
+        let amountLeft = res[this.accountID]["amount"] - amount_total_cost;
+        res[this.accountID]["amount"] = amountLeft;
+        console.log(res);
+
+        this.transactionServices.set("user_accounts_lists",res);
+        console.log("Update Complete for " + this.accountID);
+
+      }
+    );
+    
+
+    //this.sender_name = this.senderService.fetchUserData(76876876);
+    
     this.recipient_name = this.navParams.get('firstname');
     this.recipient_name_last = this.navParams.get('lastname');
     
@@ -67,11 +100,12 @@ export class ThankyouPage {
     this.ban = this.navParams.get('ban');
     this.iban = this.navParams.get('iban');
     this.account_transfer_from = this.navParams.get('account');
+    this.bank_country = this.navParams.get("bank_country");
+    this.accountID = this.navParams.get('accountID');
 
     this.transaction_ref = this.navParams.get('tref');
     this.proposal_id = this.navParams.get('pid');
-    this.transaction_amount = this.navParams.get('amount');
-    
+
     // Begin API Get Quote
     const loader = this.loaderCtrl.create({
       spinner: 'ios',
@@ -80,14 +114,47 @@ export class ThankyouPage {
 
     loader.present();
 
-    this.transaction_ref = this.navParams.get('tref');
-    this.proposal_id = this.navParams.get('pid');
-    this.transaction_amount
-
     this.transactionServices.doTransactionPayment( this.recipient_name, this.recipient_name_last, this.recipient_tel, this.recipient_nationality, this.recipient_city,this.recipient_address, this.recipient_country, this.recipient_postal_code, this.account_name, this.bic, this.ban, this.iban, this.proposal_id, this.transaction_ref )
       .subscribe(data => {
         console.log(data);
         loader.dismiss();
+        
+        this.status_timestamp = data.status_timestamp;
+        this.status = data.status;
+        this.transaction_id = data.transaction_id;
+
+        // Update to Storage
+        this.transactionServices.get("transaction_list")
+        .then(
+          res => { // Success
+            console.log(res);
+            let transactionLists = res;
+
+            res.push({
+              account: this.account_transfer_from,
+              firstname: this.recipient_name,
+              lastname: this.recipient_name_last,
+              streetaddress: this.recipient_address,
+              city: this.recipient_city,
+              country: this.recipient_country,
+              date: this.status_timestamp,
+              amount: this.transaction_amount,
+              bank_country: this.bank_country,
+              iban: this.iban,
+              ban: this.ban,
+              bic: this.bic,
+              status: this.status,
+              process_id: this.proposal_id,
+              transaction_ref: this.transaction_ref, 
+              transaction_id:this.transaction_id,
+            });
+
+            this.transactionServices.set("transaction_list",res);
+            this.transactionServices.set("transaction_in_progress",false);
+            //loader.dismiss();
+          }
+        );
+
         this.error_status = false;
       }, err => {
         loader.dismiss();
@@ -95,10 +162,13 @@ export class ThankyouPage {
         this.presentError(err);
       });
 
-      setTimeout(() => {
+      //setTimeout(() => {
         //console.log('Loading Successful');
-        loader.dismiss();
-      }, 3010);
+        //loader.dismiss();
+      //}, 3010);
+
+      
+
   }
 
   presentError(err){
@@ -115,6 +185,9 @@ export class ThankyouPage {
     alert.present();
   }
 
+  makeAnotherTransaction(){
+    this.navCtrl.push(InfoPage);
+  }
 
   goToHome(){
     this.navCtrl.push(AccountsPage);

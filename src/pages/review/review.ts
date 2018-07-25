@@ -5,6 +5,8 @@ import { ThankyouPage } from '../thankyou/thankyou';
 import { AccountsPage } from '../accounts/accounts';
 import { Storage } from '@ionic/storage';
 import { TransactionServices } from '../../services/transaction.services';
+import { InfoAddressPage } from '../infoAddress/infoAddress';
+import { InfoAmountPage } from '../infoAmount/infoAmount';
 
 import { ViewChild } from '@angular/core';
 import { Navbar } from 'ionic-angular';
@@ -70,19 +72,15 @@ export class ReviewPage {
   }
 
   editAmount(){
-
+    this.navCtrl.push(InfoAmountPage);
   }
 
   editAccount(){
-
-  }
-
-  editContact(){
-
+    this.navCtrl.push(InfoPage);
   }
 
   editAddress(){
-
+    this.navCtrl.push(InfoAddressPage);
   }
 
   tryAgain(){
@@ -186,13 +184,18 @@ export class ReviewPage {
     let bic = this.navParams.get('bic');
     let ban = this.navParams.get('ban');
     let iban = this.navParams.get('iban');
-    
+    let status = this.navParams.get('status');
+    let status_timestamp = this.navParams.get('status_timestamp');
+    let transaction_id = this.navParams.get('transaction_id');
+    let accountID = this.navParams.get('accountID');
+
     this.navCtrl.push(ThankyouPage, {
       firstname:firstname,
       lastname: lastname,
       tel:tel,
       nationality:nationality,
       account:account,
+      accountID:accountID,
       dob: dob,
       streetAddress:streetAddress,
       country:country,
@@ -204,7 +207,11 @@ export class ReviewPage {
       iban:iban,
       tref: this.tref,
       pid: this.pid,
-      bank_country: this.bank_country
+      bank_country: this.bank_country,
+      status:status,
+      status_timestamp:status_timestamp,
+      transaction_id:transaction_id,
+      charged_amt: this.charged_amt,
     }); 
     
   }

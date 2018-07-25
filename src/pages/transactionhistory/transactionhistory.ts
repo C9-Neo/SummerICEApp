@@ -3,7 +3,7 @@ import { NavController, ModalController, ViewController, LoadingController, NavP
 import { InfoPage } from '../info/info';
 import { TransactionHistoryDetailPage } from '../transactionhistorydetail/transactionhistorydetail';
 import { FilterPage } from '../filter/filter';
-
+import { TransactionServices } from '../../services/transaction.services';
 @Component({
   selector: 'page-transactionhistory',
   templateUrl: 'transactionhistory.html'
@@ -19,70 +19,40 @@ export class TransactionHistoryPage {
   //modalCtrl: any;
   //viewCtrl: any;
   
-  public transactionLists = [
-    {
-      name: 'POS Withdrawal',
-      date: 'July 6th 2018',
-      amount: '$50.00',
-      amount_left: '$7,102.00',
-      icon: 'left-down-arrow-curve.png',
-      type: '3833',
-      transaction_id: '1290723678623',
-      status: 'Pending',
-    },
-    {
-      name: 'Massy Supermarkets',
-      date: 'July 6th 2018',
-      amount: '$300.00',
-      amount_left: '$7,402.00',
-      icon: 'arrow-curve-pointing-to-right.png',
-      type: '7402',
-      transaction_id: '1290723678623',
-      status: 'Completed',
-    },
-    {
-      name: 'Wire Transfer',
-      date: 'July 5th 2018',
-      amount: '$300.00',
-      amount_left: '$7,402.00',
-      icon: 'icon_transfer.png',
-      type: '7402',
-      transaction_id: '1290723678623',
-      status: 'Completed',
-    },
-    {
-      name: 'Rubis Wildey Gas Station',
-      date: 'July 3rd 2018',
-      amount: '$150.00',
-      amount_left: '$7,402.00',
-      icon: 'arrow-curve-pointing-to-right.png',
-      type: '8763',
-      transaction_id: '1290723678623',
-      status: 'Completed',
-    },
-    {
-      name: "Amazon AWS Credit Card Purchase",
-      date: 'July 2nd 2018',
-      amount: '$300.00',
-      amount_left: '$7,402.00',
-      icon: 'credit-card.png',
-      type: '8763',
-      transaction_id: '1290723678623',
-      status: 'Rejected',
-    }
-  ]
+  public transactionLists = [];
+  public user_account_information = [];
 
   public start_date;
   public end_date;
   public type;
   public showOverlay = false;
+  public totalAmount = 5000;
 
-  constructor(public navParams: NavParams, public loaderCtrl: LoadingController, public navCtrl: NavController, public modalCtrl: ModalController) {
+  constructor(public navParams: NavParams, public transactionServices:TransactionServices, public loaderCtrl: LoadingController, public navCtrl: NavController, public modalCtrl: ModalController) {
+    
+    this.transactionServices.get("transaction_list").then(function(result){
+      console.log("result for transaction list");
+      console.log(result);
+      //this.transactionLists = result; 
+    });
+
+    this.transactionServices.get("transaction_list")
+    .then(
+      res => { // Success
+        console.log(res);
+        this.transactionLists = res; 
+      }
+    );
   }
+
+  getBalance(amount){
+    return this.totalAmount - amount;
+  }
+
+  ionViewDidLoad() {}
 
   openTransaction(event, accountNumber, ref_id, date, status, amount) {
     
-
     // Open the Transaction Detail Page
     this.navCtrl.push(TransactionHistoryDetailPage, {
       item: accountNumber,
@@ -91,7 +61,7 @@ export class TransactionHistoryPage {
       status:status,
       amount:amount
     });
-
+    
   }
 
   delete(chip: Element, option) {
@@ -138,7 +108,7 @@ export class TransactionHistoryPage {
     }else{
       return true;
     }
-    
+
   }
   
 }

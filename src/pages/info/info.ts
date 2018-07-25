@@ -46,9 +46,11 @@ export class InfoPage {
   public account_selected_error:boolean = false;
 
   public account_selected;
+  public account_id_selected;
   public account_selected_prev;
   public phone;
   public transaction = {};
+  public accountslists = [];
   public valid_account_view = true;
   private myForm: FormGroup;
   public userRecipientBasicInformation: FormGroup;
@@ -56,33 +58,6 @@ export class InfoPage {
   public myModel = '';
   public mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
-  public accountslists = [
-    {
-        alias: 'House Savings',
-        amount: '98,000,000',
-        accountNumber: '...7402',
-    },
-    {
-        alias: 'Online Chequing',
-        amount: '8,000',
-        accountNumber:'...3833',
-    },
-    {
-        alias: 'Business Savings',
-        amount: '12,000',
-        accountNumber:'...8763',
-    },
-    {
-      alias: 'College Savings',
-      amount: '1,000',
-      accountNumber:'...4509',
-    },
-    {
-      alias: 'Student Chequing',
-      amount: '300',
-      accountNumber:'...7184',
-    }
-  ]
 
   private recipient_errors = [{
     firstname_error: 'First Name is required',
@@ -96,9 +71,20 @@ export class InfoPage {
 
   constructor( private nativePageTransitions: NativePageTransitions, public actionSheetCtrl: ActionSheetController, public alert: AlertController, public transactionServices: TransactionServices, public storage: Storage, public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder) {
     
+    this.transactionServices.get("user_accounts_lists")
+    .then(
+      res => { // Success
+        console.log(res);
+        this.accountslists = res; 
+      }
+    );
+
     let account = this.navParams.get('account');
+    let accountID = this.navParams.get('accountID');
+
     if( account ){
       this.account_selected = account;
+      this.account_id_selected = accountID;
     }
 
     // Setup form fields
@@ -106,7 +92,7 @@ export class InfoPage {
       recipient_first_name: new FormControl(''),
       recipient_last_name: new FormControl(''),
       recipient_tel: new FormControl(''),
-      recipient_nationality: new FormControl('CAN'),
+      recipient_nationality: new FormControl('GBR'),
       recipient_dob: new FormControl(''),
     });
 
@@ -115,7 +101,7 @@ export class InfoPage {
       recipient_first_name: ['', Validators.required],
       recipient_last_name: ['', Validators.required],
       recipient_tel: ['', Validators.required],
-      recipient_nationality: ['CAN', Validators.required],
+      recipient_nationality: ['GBR', Validators.required],
       recipient_dob: ['', Validators.required],
     });
   }
@@ -150,12 +136,18 @@ export class InfoPage {
 
   }
 
+  radioChecked(index){
+    //alert(index);
+    this.account_id_selected = index;
+  }
+
   nextPage(event, accountsType) {
 
     if( this.userRecipientBasicInformation.controls["recipient_first_name"].valid && 
     this.userRecipientBasicInformation.controls["recipient_last_name"].valid &&
     this.userRecipientBasicInformation.controls["recipient_tel"].valid &&
-    this.userRecipientBasicInformation.controls["recipient_dob"].valid){
+    this.userRecipientBasicInformation.controls["recipient_dob"].valid &&
+    this.account_selected != ""){
           
       // Validate Information
       let firstname = this.userRecipientBasicInformation.controls["recipient_first_name"].value;
@@ -170,6 +162,9 @@ export class InfoPage {
       this.transactionServices.set('nationality', nationality);
       this.transactionServices.set('account_name', this.account);
       this.transactionServices.set('dob', dob);
+      this.transactionServices.set('transaction_in_progress', true);
+
+      //alert(this.account_id_selected);
 
       this.nativePageTransitions.fade(null);
       this.navCtrl.push(InfoAddressPage, {
@@ -178,7 +173,9 @@ export class InfoPage {
         tel:tel,
         nationality:nationality,
         account:this.account_selected,
-        dob: dob
+        accountID: this.account_id_selected,
+        dob: dob,
+        accountList: this.accountslists,
       }); 
 
     }else{
@@ -212,6 +209,41 @@ export class InfoPage {
   }
 
   ionViewDidLoad() {
+
+    this.transactionServices.get("transaction_in_progress")
+    .then(
+      res => { // Success
+        if(res == true){
+          
+          this.transactionServices.get('firstname').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_first_name"].setValue(res);
+          });
+
+          this.transactionServices.get('lastname').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_last_name"].setValue(res);
+          });
+
+          this.transactionServices.get('tel').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_tel"].setValue(res);
+          });
+
+          this.transactionServices.get('nationality').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_nationality"].setValue(res);
+          });
+
+          this.transactionServices.get('account_name').then(res => {
+            this.account_selected = res;
+          });
+
+          this.transactionServices.get('dob').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_dob"].setValue(res);
+          });
+         
+        }
+
+    });
+    
+
     this.navBar.backButtonClick = (e:UIEvent)=>{
      // todo something
      this.cancelPage();

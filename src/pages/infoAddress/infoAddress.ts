@@ -8,6 +8,7 @@ import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms'
 import { Storage } from '@ionic/storage';
 import { TransactionServices } from '../../services/transaction.services'; 
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions';
+import { InfoPage } from '../info/info';
 
 import { ViewChild } from '@angular/core';
 import { Navbar } from 'ionic-angular';
@@ -53,6 +54,30 @@ export class InfoAddressPage {
 
   ionViewDidLoad() {
 
+    this.transactionServices.get("transaction_in_progress")
+    .then(
+      res => { // Success
+        if(res == true){
+          
+          this.transactionServices.get('streetAddress').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_streetAddress"].setValue(res);
+          });
+
+          this.transactionServices.get('country').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_country"].setValue(res);
+          });
+
+          this.transactionServices.get('postal_code').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_postal_code"].setValue(res);
+          });
+
+          this.transactionServices.get('city').then(res => {
+            this.userRecipientBasicInformation.controls["recipient_city"].setValue(res);
+          });
+          
+        }
+    });
+
     this.recipient_name = this.navParams.get('firstname') + ' ' + this.navParams.get('lastname');
 
     this.account = this.navParams.get('account');
@@ -89,7 +114,8 @@ export class InfoAddressPage {
       let tel = this.navParams.get('tel');
       let nationality = this.navParams.get('nationality');
       let dob = this.navParams.get('dob');
-          
+      let accountID = this.navParams.get('accountID');
+    
       this.nativePageTransitions.fade(null);
       this.navCtrl.push(InfoAmountPage, {
         firstname:firstname,
@@ -102,6 +128,7 @@ export class InfoAddressPage {
         country:country,
         postalCode:postalCode,
         city:city,
+        accountID:accountID
       }); 
 
     }else{
@@ -145,6 +172,10 @@ export class InfoAddressPage {
     });
     alert.present();
     
+  }
+
+  editAccount(){
+    this.navCtrl.push(InfoPage);
   }
 
 
