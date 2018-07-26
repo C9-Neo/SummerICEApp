@@ -68,7 +68,7 @@ import { ChartsModule } from 'ng2-charts';
     ChartsModule,
     BrowserAnimationsModule,
     BrowserModule,
-    IonicModule.forRoot(MyApp, {}, {
+    IonicModule.forRoot(MyApp, {}, { 
       links: [
         { component: LoginPage, name: 'Login', segment: 'login' },
         { component: IntroductionPage, name: 'Introduction', segment: 'introduction' },

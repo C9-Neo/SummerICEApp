@@ -194,19 +194,19 @@ export class ThankyouPage {
   }
 
 
-  viewTransactionDetails(event, recipient_name_last,recipient_city,recipient_postal_code,transaction_amount,principal_amt, recipient_name, recipient_address, recipient_tel,bank_country, charged_amt) {
+  viewTransactionDetails(event,){ //recipient_name_last,recipient_city,recipient_postal_code,transaction_amount,principal_amt, recipient_name, recipient_address, recipient_tel,bank_country, charged_amt) {
 
     this.navCtrl.push(TransactionHistoryDetailPage); {
-    recipient_name_last:recipient_name_last;
+   /* recipient_name_last:recipient_name_last;
      recipient_name:recipient_name;
-     recipient_address:recipient_address;
+     recipient_address:recipient_address; 
      recipient_tel:recipient_tel
      bank_country:bank_country
      charged_amt:charged_amt;
      principal_amt:principal_amt;
      transaction_amount:transaction_amount;
      recipient_city:recipient_city;
-     recipient_postal_code:recipient_postal_code;
+     recipient_postal_code:recipient_postal_code; */
     }
   }
 

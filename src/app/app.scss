@@ -92,7 +92,7 @@ $fcib_dgreen:#95a800;
 
 #logo_watermark{
     position: absolute;
-    opacity: 0.2;
+    opacity: 0.1;
     bottom: 21px;
     width: 100%;
     text-align: center;
@@ -105,7 +105,9 @@ $fcib_dgreen:#95a800;
 #logo_watermark.logo_watermark_black{
     color: #292929;
 }
-
+.watermarkblue{
+    color: #0066ff;
+}
 .labelTitle{
     width:100%;
     float:left;
