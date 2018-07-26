@@ -2,15 +2,16 @@ page-contact {
 
     h4{
         font-weight: bold;
-        
+        margin-top: -4px;
         color:white;
         width:100%;
         padding-top: 13px;
-        padding-bottom: 13px;    
-        background: #ad5389;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #3c1053, #ad5389);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        
+        padding-bottom: 13px;   
+        background-image: url('../assets/imgs/purple.jpg'); 
+       /* background: #ad5389;  
+        background: -webkit-linear-gradient(to right, #3c1053, #ad5389);     
+         background: linear-gradient(to right, #3c1053, #ad5389); 
+*/
     }
     
     h5{

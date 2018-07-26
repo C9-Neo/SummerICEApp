@@ -16,13 +16,17 @@ import { Chart } from 'chart.js';
 })
 export class AccountsactivityPage {
 
+public accountid;
+public curr_amount;
+public avail_amount;
+
   @ViewChild('lineCanvas') lineCanvas;
   lineChart: any; 
 
   public accountslists = [
     {
         alias: 'House Savings',
-        amount: '98000',
+        amount: '98000000',
         account_num: '7402',
         selected: true,
         chartSet: [65, 59, 80, 81, 56, 55, 40],
@@ -90,6 +94,10 @@ export class AccountsactivityPage {
   showAccounts = true;
 
   constructor(public loaderCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams) {
+   this.accountid = this.navParams.get("accountid");
+   this.curr_amount = this.accountslists[this.accountid]["amount"];
+   this.avail_amount = this.curr_amount - 50;
+   
     this.account_selected = "7402";
   }
 
