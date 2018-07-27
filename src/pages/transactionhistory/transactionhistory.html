@@ -75,7 +75,7 @@
         <ion-item  *ngIf = "checkFilter(transaction.status)" class = "transaction_wrap transaction_{{transaction.status | lowercase}}" (click)="openTransaction($event,'232',transaction.transaction_id,transaction.date,transaction.status,transaction.amount, transaction.city)"> 
 
           <ion-row >
-
+      
             <ion-col col col-5>
               <div class = "transaction_number"> {{transaction.firstname}} {{transaction.lastname}} </div>
               <div class = "transaction_date" > {{transaction.date | date: 'fullDate' }} </div>
